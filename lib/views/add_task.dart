@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../db.dart';
+// import '../db.dart';
 
 
 class AddTaskView extends StatefulWidget {
   const AddTaskView({super.key});
 
-  final String title = "Add task";
+  final String title = "Add Lanak slow";
 
   @override
   State<AddTaskView> createState() => _AddTaskViewState();
@@ -15,12 +15,20 @@ class AddTaskView extends StatefulWidget {
 
 class _AddTaskViewState extends State<AddTaskView> {
   final styleTaskDetailText = const TextStyle(fontSize: 24);
+  final lanakNameController = TextEditingController();
+  final lanakHoursController = TextEditingController();
+
+  @override
+  void dispose() {
+    lanakNameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
       body: _taskDetail(),
@@ -28,18 +36,45 @@ class _AddTaskViewState extends State<AddTaskView> {
   }
 
   Widget _taskDetail() {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Whatever"),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          child: const Text("Go back"),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+              child: TextField(
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: "Enter Lanak name",
+                ),
+                controller: lanakNameController,
+              )
+          ),
+          Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: TextField(
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: "Enter Lanak hours per week",
+                ),
+                controller: lanakHoursController,
+              )
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: ElevatedButton(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(
+                        "Will do ${lanakNameController.text} for ${lanakHoursController.text} hours per week")
+                    )
+                  );
+                },
+                child: const Text("Submit"),
+            )
+          )
+        ],
+      )
     );
   }
 }

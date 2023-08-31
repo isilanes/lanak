@@ -7,7 +7,7 @@ import 'add_task.dart';
 class MainView extends StatefulWidget {
   const MainView({super.key});
 
-  final String title = "Task list";
+  final String title = "Lanak list";
 
   @override
   State<MainView> createState() => _MainViewState();
