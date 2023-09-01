@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class AddTaskView extends StatefulWidget {
   const AddTaskView({super.key});
 
-  final String title = "Add Lanak slow";
+  final String title = "Add Lanak";
 
   @override
   State<AddTaskView> createState() => _AddTaskViewState();
