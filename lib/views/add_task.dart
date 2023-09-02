@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-// import '../db.dart';
+import '../db.dart';
 
 
 class AddTaskView extends StatefulWidget {
@@ -63,13 +63,11 @@ class _AddTaskViewState extends State<AddTaskView> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: ElevatedButton(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(
-                        "Will do ${lanakNameController.text} for ${lanakHoursController.text} hours per week")
-                    )
-                  );
-                },
+                onPressed: () => saveTask(
+                    context,
+                    lanakNameController.text,
+                    lanakHoursController.text,
+                ),
                 child: const Text("Submit"),
             )
           )

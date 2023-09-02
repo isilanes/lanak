@@ -44,7 +44,7 @@ class _MainViewState extends State<MainView> {
     return ListView(
       padding: const EdgeInsets.all(16.0),
       children: [
-        for (final task in getTasks())
+        for (final task in getTasksOld())
           _buildRow(task)
       ],
     );
