@@ -35,7 +35,7 @@ class Task {
 
 void saveTask (context, taskName, taskHours) async {
   Map<String, Object> taskDict = {
-    "id": 0,
+    "id": 1,
     "name": taskName,
     "hours": taskHours,
   };
@@ -61,11 +61,10 @@ Future<List<String>> getTasks() async {
 
   print(maps);
 
-  // List list = List.generate(maps.length, (index) {
-  //
-  // })
-
-  return ["Tarea 1", "Tarea 2"];
+  return [
+    for (final map in maps)
+      map["name"]
+  ];
 }
 
 
