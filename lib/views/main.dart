@@ -16,7 +16,7 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
   final styleTaskListText = const TextStyle(fontSize: 24);
-  final Future<List<String>> _tasks = getTasks();
+  Future<List<String>> _tasks = getTasks();
 
   void _addTask() {
     Navigator.push(
@@ -37,7 +37,22 @@ class _MainViewState extends State<MainView> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(widget.title),
+            Padding(
+                padding: const EdgeInsets.all(8),
+                child: ElevatedButton(
+                  onPressed: () {
+                    _tasks = getTasks();
+                    setState(() {});  // this is the 'refresh'
+                  },
+                  child: const Text("Refresh"),
+                ),
+            ),
+          ],
+        ),
       ),
       body: FutureBuilder<List<String>>(
         future: _tasks,
@@ -63,7 +78,7 @@ class _MainViewState extends State<MainView> {
               padding: const EdgeInsets.all(16.0),
               children: children,
           );
-        },
+        }
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addTask,
