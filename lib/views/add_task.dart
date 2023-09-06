@@ -70,6 +70,16 @@ class _AddTaskViewState extends State<AddTaskView> {
                 ),
                 child: const Text("Submit"),
             )
+          ),
+          Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: ElevatedButton(
+                onPressed: () {
+                  deleteLanaDatabase();
+                  print("db dropped!");
+                },
+                child: const Text("DROP DB"),
+              )
           )
         ],
       )

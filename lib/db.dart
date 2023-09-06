@@ -6,11 +6,12 @@ import 'package:sqflite/sqflite.dart';
 
 Future<Database> startDatabase() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   final database = openDatabase(
     join(await getDatabasesPath(), "task_database.db"),
     onCreate: (db, version) {
       return db.execute(
-        "CREATE TABLE tasks(id INTEGER PRIMARY KEY, name TEXT, hours FLOAT)",
+        "CREATE TABLE tasks(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT, hours FLOAT)",
       );
     },
     version: 1,
@@ -35,7 +36,6 @@ class Task {
 
 void saveTask (context, taskName, taskHours) async {
   Map<String, Object> taskDict = {
-    "id": 1,
     "name": taskName,
     "hours": taskHours,
   };
@@ -52,6 +52,11 @@ void saveTask (context, taskName, taskHours) async {
             "Task '$taskName' saved")
         )
   );
+}
+
+void deleteLanaDatabase () async {
+  final dbPath = join(await getDatabasesPath(), "task_database.db");
+  deleteDatabase(dbPath);
 }
 
 
