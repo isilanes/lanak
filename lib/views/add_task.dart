@@ -63,11 +63,14 @@ class _AddTaskViewState extends State<AddTaskView> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: ElevatedButton(
-                onPressed: () => saveTask(
+                onPressed: () {
+                  saveTask(
                     context,
                     lanakNameController.text,
                     lanakHoursController.text,
-                ),
+                  );
+                  Navigator.pop(context);
+                },
                 child: const Text("Submit"),
             )
           ),

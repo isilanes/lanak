@@ -18,11 +18,14 @@ class _MainViewState extends State<MainView> {
   final styleTaskListText = const TextStyle(fontSize: 24);
   Future<List<String>> _tasks = getTasks();
 
-  void _addTask() {
-    Navigator.push(
+  void _addTask() async {
+    await Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const AddTaskView())
     );
+    // We refresh the list:
+    _tasks = getTasks();
+    setState(() {});
   }
 
   Widget _buildRow(String task) {
@@ -37,22 +40,7 @@ class _MainViewState extends State<MainView> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Text(widget.title),
-            Padding(
-                padding: const EdgeInsets.all(8),
-                child: ElevatedButton(
-                  onPressed: () {
-                    _tasks = getTasks();
-                    setState(() {});  // this is the 'refresh'
-                  },
-                  child: const Text("Refresh"),
-                ),
-            ),
-          ],
-        ),
+        title: Text(widget.title),
       ),
       body: FutureBuilder<List<String>>(
         future: _tasks,
