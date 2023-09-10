@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
+
 Future<Database> startDatabase() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -20,7 +21,6 @@ Future<Database> startDatabase() async {
   return database;
 }
 
-
 class Task {
   final int id;
   final String name;
@@ -32,7 +32,6 @@ class Task {
     required this.hours,
   });
 }
-
 
 void saveTask (context, taskName, taskHours) async {
   Map<String, Object> taskDict = {
@@ -59,20 +58,16 @@ void deleteLanaDatabase () async {
   deleteDatabase(dbPath);
 }
 
-
-Future<List<String>> getTasks() async {
+Future<List<Map<String, dynamic>>> getTasks() async {
   final db = await startDatabase();
   final List<Map<String, dynamic>> maps = await db.query("tasks");
 
   print(maps);
 
-  return [
-    for (final map in maps)
-      map["name"]
-  ];
-}
+  return maps;
 
-
-List<String> getTasksOld() {
-  return ["Tarea 1", "Tarea 2"];
+  // return [
+  //   for (final map in maps)
+  //     map["name"]
+  // ];
 }

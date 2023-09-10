@@ -63,6 +63,10 @@ class _AddTaskViewState extends State<AddTaskView> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.lightBlue[100],
+                elevation: 3,
+              ),
                 onPressed: () {
                   saveTask(
                     context,

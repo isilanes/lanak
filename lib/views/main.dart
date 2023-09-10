@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:lanak/views/lana_detail.dart';
 
 import '../db.dart';
 import 'add_task.dart';
+import 'lana_detail.dart';
 
 
 class MainView extends StatefulWidget {
@@ -16,9 +18,9 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
   final styleTaskListText = const TextStyle(fontSize: 24);
-  Future<List<String>> _tasks = getTasks();
+  Future<List<Map<String, dynamic>>> _tasks = getTasks();
 
-  void _addTask() async {
+  void _goToLanaAdd() async {
     await Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const AddTaskView())
@@ -27,11 +29,27 @@ class _MainViewState extends State<MainView> {
     _tasks = getTasks();
     setState(() {});
   }
+  
+  void _goToLanaDetail(Map<String, dynamic> lana) async {
+    await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LanaDetailView(lana))
+    );
+    // We refresh the list:
+    _tasks = getTasks();
+    setState(() {});
+  }
 
-  Widget _buildRow(String task) {
-    return ListTile(
-      leading: const Icon(Icons.access_time, color: Colors.deepOrange),
-      title: Text(task, style: styleTaskListText,),
+  Widget _buildRow(Map<String, dynamic> task) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.lightBlue[100],
+        elevation: 3,
+      ),
+      onPressed: () {
+        _goToLanaDetail(task);
+      },
+      child: Text(task["name"], style: styleTaskListText)
     );
   }
 
@@ -42,9 +60,12 @@ class _MainViewState extends State<MainView> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: FutureBuilder<List<String>>(
+      body: FutureBuilder<List<Map<String, dynamic>>>(
         future: _tasks,
-        builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+        builder: (
+            BuildContext context,
+            AsyncSnapshot<List<Map<String, dynamic>>> snapshot,
+        ) {
           List<Widget> children;
           if (snapshot.hasData) {
             children = <Widget>[
@@ -69,7 +90,7 @@ class _MainViewState extends State<MainView> {
         }
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _addTask,
+        onPressed: _goToLanaAdd,
         tooltip: 'Add task',
         child: const Icon(Icons.ac_unit),
       ),
