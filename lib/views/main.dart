@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lanak/views/lana_detail.dart';
 
 import '../db.dart';
-import 'add_task.dart';
+import 'lana_edit.dart';
 import 'lana_detail.dart';
 
 
@@ -23,7 +22,7 @@ class _MainViewState extends State<MainView> {
   void _goToLanaAdd() async {
     await Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const AddTaskView())
+        MaterialPageRoute(builder: (context) => const LanaEditView({}))
     );
     // We refresh the list:
     _tasks = getTasks();
@@ -49,7 +48,10 @@ class _MainViewState extends State<MainView> {
       onPressed: () {
         _goToLanaDetail(task);
       },
-      child: Text(task["name"], style: styleTaskListText)
+      child: Text(
+          "${task['id']} - ${task['name']} - ${task['hours']}",
+          style: styleTaskListText,
+      )
     );
   }
 

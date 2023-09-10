@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
 import '../db.dart';
+import 'main.dart';
 
 
-class AddTaskView extends StatefulWidget {
-  const AddTaskView({super.key});
+class LanaEditView extends StatefulWidget {
+  final Map<String, dynamic> lana;
 
-  final String title = "Add Lanak";
+  const LanaEditView(this.lana, {super.key});
 
   @override
-  State<AddTaskView> createState() => _AddTaskViewState();
+  State<LanaEditView> createState() => _LanaEditViewState();
 }
 
-
-class _AddTaskViewState extends State<AddTaskView> {
+class _LanaEditViewState extends State<LanaEditView> {
   final styleTaskDetailText = const TextStyle(fontSize: 24);
   final lanakNameController = TextEditingController();
   final lanakHoursController = TextEditingController();
@@ -24,12 +24,36 @@ class _AddTaskViewState extends State<AddTaskView> {
     super.dispose();
   }
 
+  String _title() {
+    if (widget.lana.containsKey("id")) {
+      return "Edit Lana";
+    } else {
+      return "Add Lana";
+    }
+  }
+
+  String _defaultLanaName () {
+    if (widget.lana.containsKey("name")) {
+      return widget.lana["name"];
+    } else {
+      return "";
+    }
+  }
+
+  String _defaultLanaHours () {
+    if (widget.lana.containsKey("hours")) {
+      return widget.lana["hours"].toString();
+    } else {
+      return "";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: Text(_title()),
       ),
       body: _taskDetail(),
     );
@@ -47,7 +71,7 @@ class _AddTaskViewState extends State<AddTaskView> {
                   border: OutlineInputBorder(),
                   labelText: "Enter Lanak name",
                 ),
-                controller: lanakNameController,
+                controller: lanakNameController..text = _defaultLanaName(),
               )
           ),
           Padding(
@@ -57,7 +81,7 @@ class _AddTaskViewState extends State<AddTaskView> {
                   border: OutlineInputBorder(),
                   labelText: "Enter Lanak hours per week",
                 ),
-                controller: lanakHoursController,
+                controller: lanakHoursController..text = _defaultLanaHours(),
               )
           ),
           Padding(
@@ -68,12 +92,21 @@ class _AddTaskViewState extends State<AddTaskView> {
                 elevation: 3,
               ),
                 onPressed: () {
+                  int lanaId = -1;
+                  if (widget.lana.containsKey("id")) {
+                    lanaId = widget.lana["id"];
+                  }
                   saveTask(
                     context,
+                    lanaId,
                     lanakNameController.text,
                     lanakHoursController.text,
                   );
-                  Navigator.pop(context);
+                  // Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const MainView())
+                  );
                 },
                 child: const Text("Submit"),
             )

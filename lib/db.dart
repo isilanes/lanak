@@ -33,22 +33,25 @@ class Task {
   });
 }
 
-void saveTask (context, taskName, taskHours) async {
-  Map<String, Object> taskDict = {
-    "name": taskName,
-    "hours": taskHours,
+void saveTask (context, lanaId, lanaName, lanaHours) async {
+  Map<String, Object> lanaDict = {
+    "name": lanaName,
+    "hours": lanaHours,
   };
+  if (lanaId != -1) {
+    lanaDict["id"] = lanaId;
+  }
   final db = await startDatabase();
 
   await db.insert(
     "tasks",
-    taskDict,
+    lanaDict,
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
 
   ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(
-            "Task '$taskName' saved")
+            "Lana '$lanaName' saved")
         )
   );
 }

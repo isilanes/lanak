@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../db.dart';
+import 'lana_edit.dart';
 
 
 class LanaDetailView extends StatefulWidget {
@@ -11,19 +11,16 @@ class LanaDetailView extends StatefulWidget {
   final String title = "Lana detail";
 
   @override
-  State<LanaDetailView> createState() => _LanaDetailViewState(this.lana);
+  State<LanaDetailView> createState() => _LanaDetailViewState();
 }
 
 
 class _LanaDetailViewState extends State<LanaDetailView> {
-  final Map<String, dynamic> lana;
   final _styleLanaName = const TextStyle(fontSize: 32);
   final _styleLanaTime = const TextStyle(
     fontSize: 20,
     color: Colors.brown,
   );
-
-  _LanaDetailViewState(this.lana);
 
   @override
   Widget build(BuildContext context) {
@@ -47,14 +44,14 @@ class _LanaDetailViewState extends State<LanaDetailView> {
                   vertical: 16,
               ),
               child: Text(
-                lana['name'],
+                widget.lana['name'],
                 style: _styleLanaName,
               ),
           ),
           Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
               child: Text(
-                "for ${lana['hours']} h/week",
+                "for ${widget.lana['hours']} h/week",
                 style: _styleLanaTime,
               )
           ),
@@ -62,7 +59,10 @@ class _LanaDetailViewState extends State<LanaDetailView> {
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
             child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LanaEditView(widget.lana))
+                  );
                 },
                 child: const Text("Edit"),
             )
