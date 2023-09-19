@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'lana_edit.dart';
+import 'lana_run.dart';
 
 
 class LanaDetailView extends StatefulWidget {
@@ -35,40 +36,57 @@ class _LanaDetailViewState extends State<LanaDetailView> {
 
   Widget _lanaDetail() {
     return Center(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 4,
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
                   vertical: 16,
+                ),
+                child: Text(
+                  widget.lana['name'],
+                  style: _styleLanaName,
+                ),
               ),
-              child: Text(
-                widget.lana['name'],
-                style: _styleLanaName,
+              Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  child: Text(
+                    "for ${widget.lana['hours']} h/week",
+                    style: _styleLanaTime,
+                  )
               ),
-          ),
-          Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-              child: Text(
-                "for ${widget.lana['hours']} h/week",
-                style: _styleLanaTime,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => LanaEditView(widget.lana))
+                          );
+                        },
+                        child: const Text("Edit"),
+                      )
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => LanaRunView(widget.lana))
+                          );
+                        },
+                        child: const Text("Start"),
+                      )
+                  ),
+                ],
               )
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-            child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LanaEditView(widget.lana))
-                  );
-                },
-                child: const Text("Edit"),
-            )
-          ),
-        ],
-      )
+            ]
+        )
     );
   }
 }
