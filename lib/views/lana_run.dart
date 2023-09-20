@@ -15,9 +15,14 @@ class LanaRunView extends StatefulWidget {
 }
 
 class _LanaRunViewState extends State<LanaRunView> {
-  final styleTaskDetailText = const TextStyle(fontSize: 24);
-  final _title = "Running";
+  final styleTimeDisplayText = const TextStyle(
+      fontSize: 48,
+      fontFamily: 'Helvetica',
+      fontWeight: FontWeight.bold,
+  );
+  final styleButtonText = const TextStyle(fontSize: 20, color: Colors.white);
   final StopWatchTimer _stopWatchTimer = StopWatchTimer();
+  int elapsedMilliseconds = 0;
 
   @override
   void dispose() async {
@@ -25,87 +30,137 @@ class _LanaRunViewState extends State<LanaRunView> {
     super.dispose();
   }
 
-  String _defaultLanaName () {
-    if (widget.lana.containsKey("name")) {
-      return widget.lana["name"];
-    } else {
-      return "";
-    }
-  }
-
-  String _defaultLanaHours () {
-    if (widget.lana.containsKey("hours")) {
-      return widget.lana["hours"].toString();
-    } else {
-      return "";
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(_title),
+        title: Text("Active: ${widget.lana['name']}"),
       ),
       body: _lanaStopWatch(),
     );
   }
 
+  Widget _streamTime() {
+    return StreamBuilder<int>(
+      stream: _stopWatchTimer.rawTime,
+      initialData: 0,
+      builder: (context, snap) {
+        final value = snap.data!.toInt();
+        final displayTime = StopWatchTimer.getDisplayTime(value);
+        return Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Text(
+                displayTime,
+                style: styleTimeDisplayText,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget _lanaStopWatch() {
-    return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                padding: const EdgeInsets.all(4),
-                shape: const StadiumBorder(),
-              ),
-              onPressed: () {
-                // CountUpTimerPage.navigatorPush(context);
-                _stopWatchTimer.onResetTimer();
-                _stopWatchTimer.onStartTimer();
-                print(_stopWatchTimer.isRunning);
-              },
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  'Start',
-                  style: TextStyle(color: Colors.white),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 64, 16, 24),
+          child: _streamTime(),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  padding: const EdgeInsets.all(4),
+                  shape: const StadiumBorder(),
+                ),
+                onPressed: () {
+                  // CountUpTimerPage.navigatorPush(context);
+                  _stopWatchTimer.onStartTimer();
+                  print(_stopWatchTimer.isRunning);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    'Start',
+                    style: styleButtonText,
+                  ),
                 ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                padding: const EdgeInsets.all(4),
-                shape: const StadiumBorder(),
-              ),
-              onPressed: () {
-                // CountDownTimerPage.navigatorPush(context);
-                _stopWatchTimer.onStopTimer();
-                print(_stopWatchTimer.isRunning);
-                print(_stopWatchTimer.secondTime.value);
-              },
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  'Stop',
-                  style: TextStyle(color: Colors.white),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  padding: const EdgeInsets.all(4),
+                  shape: const StadiumBorder(),
+                ),
+                onPressed: () async {
+                  _stopWatchTimer.onStopTimer();
+                  elapsedMilliseconds = _stopWatchTimer.rawTime.value;
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    'Stop',
+                    style: styleButtonText,
+                  ),
                 ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent,
+                  padding: const EdgeInsets.all(4),
+                  shape: const StadiumBorder(),
+                ),
+                onPressed: () {
+                  _stopWatchTimer.onStopTimer();
+                  _stopWatchTimer.onResetTimer();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    'Reset',
+                    style: styleButtonText,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 4),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.purple,
+              padding: const EdgeInsets.all(8),
+              shape: const StadiumBorder(),
+            ),
+            onPressed: () {
+              print(elapsedMilliseconds);
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Text(
+                'Finish',
+                style: styleButtonText,
+              ),
+            ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
