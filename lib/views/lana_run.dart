@@ -26,8 +26,8 @@ class _LanaRunViewState extends State<LanaRunView> {
 
   @override
   void dispose() async {
-    await _stopWatchTimer.dispose();
     super.dispose();
+    await _stopWatchTimer.dispose();
   }
 
   @override
@@ -85,7 +85,6 @@ class _LanaRunViewState extends State<LanaRunView> {
                 onPressed: () {
                   // CountUpTimerPage.navigatorPush(context);
                   _stopWatchTimer.onStartTimer();
-                  print(_stopWatchTimer.isRunning);
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -149,7 +148,13 @@ class _LanaRunViewState extends State<LanaRunView> {
               shape: const StadiumBorder(),
             ),
             onPressed: () {
-              print(elapsedMilliseconds);
+              saveSession(
+                  context,
+                  widget.lana["id"],
+                  DateTime.now().toString(),
+                  elapsedMilliseconds/1000,
+              );
+              Navigator.pop(context);
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),

@@ -102,7 +102,6 @@ class _LanaEditViewState extends State<LanaEditView> {
                     lanakNameController.text,
                     lanakHoursController.text,
                   );
-                  // Navigator.pop(context);
                   Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const MainView())

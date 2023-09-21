@@ -11,8 +11,11 @@ Future<Database> startDatabase() async {
   final database = openDatabase(
     join(await getDatabasesPath(), "task_database.db"),
     onCreate: (db, version) {
-      return db.execute(
+      db.execute(
         "CREATE TABLE tasks(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT, hours FLOAT)",
+      );
+      db.execute(
+        "CREATE TABLE sessions(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, task_id INTEGER, seconds FLOAT, timestamp TEXT)",
       );
     },
     version: 1,
@@ -30,6 +33,20 @@ class Task {
     required this.id,
     required this.name,
     required this.hours,
+  });
+}
+
+class Session {
+  final int id;
+  final int taskId;  // FK to Task
+  final double seconds;
+  final String timestamp;
+
+  const Session({
+    required this.id,
+    required this.taskId,
+    required this.seconds,
+    required this.timestamp,
   });
 }
 
@@ -56,6 +73,21 @@ void saveTask (context, lanaId, lanaName, lanaHours) async {
   );
 }
 
+void saveSession (context, lanaId, timestamp, seconds) async {
+  Map<String, Object> sessionDict = {
+    "task_id": lanaId,
+    "seconds": seconds,
+    "timestamp": timestamp,
+  };
+  final db = await startDatabase();
+
+  await db.insert(
+    "sessions",
+    sessionDict,
+    conflictAlgorithm: ConflictAlgorithm.replace,
+  );
+}
+
 void deleteLanaDatabase () async {
   final dbPath = join(await getDatabasesPath(), "task_database.db");
   deleteDatabase(dbPath);
@@ -65,12 +97,16 @@ Future<List<Map<String, dynamic>>> getTasks() async {
   final db = await startDatabase();
   final List<Map<String, dynamic>> maps = await db.query("tasks");
 
-  print(maps);
-
   return maps;
+}
 
-  // return [
-  //   for (final map in maps)
-  //     map["name"]
-  // ];
+Future<List<Map<String, dynamic>>> getSessionsOf(lanaId) async {
+  final db = await startDatabase();
+  final List<Map<String, dynamic>> sessions = await db.query(
+      "sessions",
+      where: "task_id=?",
+      whereArgs: [lanaId],
+  );
+
+  return sessions;
 }
