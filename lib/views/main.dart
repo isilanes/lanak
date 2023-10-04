@@ -16,9 +16,8 @@ class MainView extends StatefulWidget {
 
 
 class _MainViewState extends State<MainView> {
-  final styleTaskListText = const TextStyle(fontSize: 24);
-  // final Future<List<Map<String, dynamic>>> _tasks = getTasks();
-  final Future<List<Map<String, dynamic>>> _tasks = getLanakWithLag();
+  final styleTaskListText = const TextStyle(fontSize: 24, color: Colors.white);
+  Future<List<Map<String, dynamic>>> _tasks = getLanakWithLag();
 
   void _goToLanaAdd() async {
     await Navigator.push(
@@ -26,6 +25,7 @@ class _MainViewState extends State<MainView> {
         MaterialPageRoute(builder: (context) => const LanaEditView({}))
     );
     // We refresh the list:
+    _tasks = getLanakWithLag();
     setState(() {});
   }
   
@@ -35,14 +35,21 @@ class _MainViewState extends State<MainView> {
         MaterialPageRoute(builder: (context) => LanaDetailView(lana))
     );
     // We refresh the list:
+    _tasks = getLanakWithLag();
     setState(() {});
   }
 
-  Widget _buildRow(Map<String, dynamic> task, double lagHours) {
-    final _screen = MediaQuery.of(context).size;
+  Widget _buildRow(Map<String, dynamic> task) {
+    final screen = MediaQuery.of(context).size;
+    final lag = task["lag"];
+    Color color = Colors.deepOrange;
+    if (lag < 0) {
+      color = Colors.lightGreen;
+    }
+
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.lightBlue[100],
+        backgroundColor: color,
         elevation: 3,
       ),
       onPressed: () {
@@ -51,7 +58,7 @@ class _MainViewState extends State<MainView> {
       child: Row(
         children: [
           SizedBox(
-            width: _screen.width * 0.55,
+            width: screen.width * 0.55,
             child: Text(
               task['name'],
               style: styleTaskListText,
@@ -64,7 +71,7 @@ class _MainViewState extends State<MainView> {
           ),
           // const VerticalDivider(width: 10.0),
           SizedBox(
-              width: _screen.width * 0.20,
+              width: screen.width * 0.20,
               child: Text(
                 task['lag'].toStringAsFixed(1),
                 style: styleTaskListText,
@@ -92,10 +99,9 @@ class _MainViewState extends State<MainView> {
         ) {
           List<Widget> children;
           if (snapshot.hasData) {
-            double lagHours = 666.0;
             children = <Widget>[
               for (final task in snapshot.data!)
-                _buildRow(task, lagHours)
+                _buildRow(task)
             ];
           } else if (snapshot.hasError) {
             children = <Widget>[
