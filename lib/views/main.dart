@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../db.dart';
-import 'lana_edit.dart';
-import 'lana_detail.dart';
+import 'package:lanak/process.dart';
+import 'package:lanak/views/lana_edit.dart';
+import 'package:lanak/views/lana_detail.dart';
 
 
 class MainView extends StatefulWidget {
@@ -17,7 +17,8 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
   final styleTaskListText = const TextStyle(fontSize: 24);
-  Future<List<Map<String, dynamic>>> _tasks = getTasks();
+  // final Future<List<Map<String, dynamic>>> _tasks = getTasks();
+  final Future<List<Map<String, dynamic>>> _tasks = getLanakWithLag();
 
   void _goToLanaAdd() async {
     await Navigator.push(
@@ -25,7 +26,6 @@ class _MainViewState extends State<MainView> {
         MaterialPageRoute(builder: (context) => const LanaEditView({}))
     );
     // We refresh the list:
-    _tasks = getTasks();
     setState(() {});
   }
   
@@ -35,11 +35,10 @@ class _MainViewState extends State<MainView> {
         MaterialPageRoute(builder: (context) => LanaDetailView(lana))
     );
     // We refresh the list:
-    _tasks = getTasks();
     setState(() {});
   }
 
-  Widget _buildRow(Map<String, dynamic> task) {
+  Widget _buildRow(Map<String, dynamic> task, double lagHours) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.lightBlue[100],
@@ -49,7 +48,7 @@ class _MainViewState extends State<MainView> {
         _goToLanaDetail(task);
       },
       child: Text(
-          "${task['id']} - ${task['name']} - ${task['hours']}",
+        "${task['name']} | ${task['lag']}",
           style: styleTaskListText,
       )
     );
@@ -70,9 +69,10 @@ class _MainViewState extends State<MainView> {
         ) {
           List<Widget> children;
           if (snapshot.hasData) {
+            double lagHours = 666.0;
             children = <Widget>[
               for (final task in snapshot.data!)
-                _buildRow(task)
+                _buildRow(task, lagHours)
             ];
           } else if (snapshot.hasError) {
             children = <Widget>[

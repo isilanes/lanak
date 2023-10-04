@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:lanak/db.dart';
 
-import 'lana_edit.dart';
-import 'lana_run.dart';
+import 'package:lanak/db.dart';
+import 'package:lanak/process.dart';
+import 'package:lanak/views/lana_edit.dart';
+import 'package:lanak/views/lana_run.dart';
 
 
 class LanaDetailView extends StatefulWidget {
@@ -116,6 +117,55 @@ class _LanaDetailViewState extends State<LanaDetailView> {
                       )
                   ),
                 ],
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                child: FutureBuilder<double>(
+                  future: totalLanaRunHours(widget.lana["id"]),
+                  builder: (
+                      BuildContext context,
+                      AsyncSnapshot<double> snapshot,
+                  ) {
+                    double totalHours = snapshot.data ?? 0;
+                    return Text("run for: ${totalHours.toString()} hours");
+                  }
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                child: FutureBuilder<int>(
+                    future: totalLanaAgeHours(widget.lana["id"]),
+                    builder: (
+                        BuildContext context,
+                        AsyncSnapshot<int> snapshot,
+                        ) {
+                      return Text("age: ${snapshot.data.toString()} hours");
+                    }
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                child: FutureBuilder<double>(
+                    future: realWeeklyHours(widget.lana["id"]),
+                    builder: (
+                        BuildContext context,
+                        AsyncSnapshot<double> snapshot,
+                        ) {
+                      return Text("weekly run: ${snapshot.data.toString()} hours");
+                    }
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                child: FutureBuilder<double>(
+                    future: lagBehind(widget.lana["id"]),
+                    builder: (
+                        BuildContext context,
+                        AsyncSnapshot<double> snapshot,
+                        ) {
+                      return Text("lag behind: ${snapshot.data.toString()}");
+                    }
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
