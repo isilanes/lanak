@@ -39,6 +39,7 @@ class _MainViewState extends State<MainView> {
   }
 
   Widget _buildRow(Map<String, dynamic> task, double lagHours) {
+    final _screen = MediaQuery.of(context).size;
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.lightBlue[100],
@@ -47,9 +48,31 @@ class _MainViewState extends State<MainView> {
       onPressed: () {
         _goToLanaDetail(task);
       },
-      child: Text(
-        "${task['name']} | ${task['lag']}",
-          style: styleTaskListText,
+      child: Row(
+        children: [
+          SizedBox(
+            width: _screen.width * 0.55,
+            child: Text(
+              task['name'],
+              style: styleTaskListText,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          Text(
+            "|",
+            style: styleTaskListText,
+          ),
+          // const VerticalDivider(width: 10.0),
+          SizedBox(
+              width: _screen.width * 0.20,
+              child: Text(
+                task['lag'].toStringAsFixed(1),
+                style: styleTaskListText,
+                textAlign: TextAlign.right,
+                overflow: TextOverflow.ellipsis,
+              )
+          )
+        ]
       )
     );
   }
