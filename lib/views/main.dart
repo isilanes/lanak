@@ -69,11 +69,10 @@ class _MainViewState extends State<MainView> {
             "|",
             style: styleTaskListText,
           ),
-          // const VerticalDivider(width: 10.0),
           SizedBox(
               width: screen.width * 0.20,
               child: Text(
-                task['lag'].toStringAsFixed(1),
+                lag.toStringAsFixed(1),
                 style: styleTaskListText,
                 textAlign: TextAlign.right,
                 overflow: TextOverflow.ellipsis,
@@ -123,7 +122,7 @@ class _MainViewState extends State<MainView> {
       floatingActionButton: FloatingActionButton(
         onPressed: _goToLanaAdd,
         tooltip: 'Add task',
-        child: const Icon(Icons.ac_unit),
+        child: const Icon(Icons.add),
       ),
     );
   }

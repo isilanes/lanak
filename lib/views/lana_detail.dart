@@ -6,6 +6,15 @@ import 'package:lanak/views/lana_edit.dart';
 import 'package:lanak/views/lana_run.dart';
 
 
+String hoursToHuman(num hours) {
+  if (hours > 168) {
+    return "${(hours/168.0).toStringAsFixed(1)} weeks";
+  } else if (hours > 24) {
+      return "${(hours/24.0).toStringAsFixed(1)} days";
+  }
+  return "${hours.toStringAsFixed(1)} hours";
+}
+
 class LanaDetailView extends StatefulWidget {
   final Map<String, dynamic> lana;
 
@@ -67,6 +76,9 @@ class _LanaDetailViewState extends State<LanaDetailView> {
   }
 
   Widget _lanaDetail() {
+    const styleButtonText = TextStyle(fontSize: 20, color: Colors.white);
+    const styleInfoListText = TextStyle(fontSize: 16, color: Colors.black);
+
     return Center(
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,18 +106,34 @@ class _LanaDetailViewState extends State<LanaDetailView> {
                   Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          padding: const EdgeInsets.all(4),
+                          shape: const StadiumBorder(),
+                        ),
                         onPressed: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => LanaEditView(widget.lana))
                           );
                         },
-                        child: const Text("Edit"),
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          child: Text(
+                            "Edit",
+                            style: styleButtonText,
+                          ),
+                        ),
                       )
                   ),
                   Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
                       child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          padding: const EdgeInsets.all(4),
+                          shape: const StadiumBorder(),
+                        ),
                         onPressed: () async {
                           await Navigator.push(
                               context,
@@ -113,7 +141,13 @@ class _LanaDetailViewState extends State<LanaDetailView> {
                           );
                           setState(() {});
                         },
-                        child: const Text("Start"),
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          child: Text(
+                            "Start",
+                            style: styleButtonText,
+                          ),
+                        ),
                       )
                   ),
                 ],
@@ -127,7 +161,10 @@ class _LanaDetailViewState extends State<LanaDetailView> {
                       AsyncSnapshot<double> snapshot,
                   ) {
                     double totalHours = snapshot.data ?? 0;
-                    return Text("run for: ${totalHours.toString()} hours");
+                    return Text(
+                        "Total time: ${totalHours.toStringAsFixed(1)} hours",
+                        style: styleInfoListText,
+                    );
                   }
                 ),
               ),
@@ -139,7 +176,11 @@ class _LanaDetailViewState extends State<LanaDetailView> {
                         BuildContext context,
                         AsyncSnapshot<int> snapshot,
                         ) {
-                      return Text("age: ${snapshot.data.toString()} hours");
+                      // return Text("Age: ${snapshot.data.toString()} hours");
+                      return Text(
+                          "Age: ${hoursToHuman(snapshot.data!)}",
+                          style: styleInfoListText,
+                      );
                     }
                 ),
               ),
@@ -151,7 +192,10 @@ class _LanaDetailViewState extends State<LanaDetailView> {
                         BuildContext context,
                         AsyncSnapshot<double> snapshot,
                         ) {
-                      return Text("weekly run: ${snapshot.data.toString()} hours");
+                      return Text(
+                        "Weekly time: ${hoursToHuman(snapshot.data!)}",
+                        style: styleInfoListText,
+                      );
                     }
                 ),
               ),
@@ -163,9 +207,16 @@ class _LanaDetailViewState extends State<LanaDetailView> {
                         BuildContext context,
                         AsyncSnapshot<double> snapshot,
                         ) {
-                      return Text("lag behind: ${snapshot.data.toString()}");
+                      return Text(
+                        "Time behind/ahead: ${hoursToHuman(snapshot.data!)}",
+                        style: styleInfoListText,
+                      );
                     }
                 ),
+              ),
+              const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                  child: Text("Events:", style: styleInfoListText),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

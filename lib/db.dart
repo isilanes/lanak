@@ -100,12 +100,14 @@ Future<List<Map<String, dynamic>>> getTasks() async {
   return maps;
 }
 
-Future<List<Map<String, dynamic>>> getSessionsOf(lanaId) async {
+Future<List<Map<String, dynamic>>> getSessionsOf(int lanaId, [int limit = 10]) async {
   final db = await startDatabase();
   final List<Map<String, dynamic>> sessions = await db.query(
       "sessions",
       where: "task_id=?",
       whereArgs: [lanaId],
+      limit: limit,
+      orderBy: "timestamp DESC",
   );
 
   return sessions;

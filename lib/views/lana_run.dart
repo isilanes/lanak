@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 import '../db.dart';
-import 'main.dart';
 
 
 class LanaRunView extends StatefulWidget {
@@ -23,6 +22,9 @@ class _LanaRunViewState extends State<LanaRunView> {
   final styleButtonText = const TextStyle(fontSize: 20, color: Colors.white);
   final StopWatchTimer _stopWatchTimer = StopWatchTimer();
   int elapsedMilliseconds = 0;
+  String _currentPauseButtonText = "Start";
+  bool _isTimerRunning = false;
+  Color _currentPauseButtonColor = Colors.green;
 
   @override
   void dispose() async {
@@ -78,39 +80,31 @@ class _LanaRunViewState extends State<LanaRunView> {
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
+                  backgroundColor: _currentPauseButtonColor,
                   padding: const EdgeInsets.all(4),
                   shape: const StadiumBorder(),
-                ),
-                onPressed: () {
-                  // CountUpTimerPage.navigatorPush(context);
-                  _stopWatchTimer.onStartTimer();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    'Start',
-                    style: styleButtonText,
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  padding: const EdgeInsets.all(4),
-                  shape: const StadiumBorder(),
+                  minimumSize: const Size(100, 40),
                 ),
                 onPressed: () async {
-                  _stopWatchTimer.onStopTimer();
-                  elapsedMilliseconds = _stopWatchTimer.rawTime.value;
+                  setState(() {
+                    if (_isTimerRunning) {
+                        _stopWatchTimer.onStopTimer();
+                        elapsedMilliseconds = _stopWatchTimer.rawTime.value;
+                        _isTimerRunning = false;
+                        _currentPauseButtonText = "Start";
+                        _currentPauseButtonColor = Colors.green;
+                    } else {
+                        _stopWatchTimer.onStartTimer();
+                        _isTimerRunning = true;
+                        _currentPauseButtonText = "Pause";
+                        _currentPauseButtonColor = Colors.red;
+                    }
+                  });
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
-                    'Stop',
+                    _currentPauseButtonText,
                     style: styleButtonText,
                   ),
                 ),
@@ -123,6 +117,7 @@ class _LanaRunViewState extends State<LanaRunView> {
                   backgroundColor: Colors.blueAccent,
                   padding: const EdgeInsets.all(4),
                   shape: const StadiumBorder(),
+                  minimumSize: const Size(100, 40),
                 ),
                 onPressed: () {
                   _stopWatchTimer.onStopTimer();
@@ -137,33 +132,34 @@ class _LanaRunViewState extends State<LanaRunView> {
                 ),
               ),
             ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 4),
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.purple,
-              padding: const EdgeInsets.all(8),
-              shape: const StadiumBorder(),
-            ),
-            onPressed: () {
-              saveSession(
-                  context,
-                  widget.lana["id"],
-                  DateTime.now().toString(),
-                  elapsedMilliseconds/1000,
-              );
-              Navigator.pop(context);
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Text(
-                'Finish',
-                style: styleButtonText,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.purple,
+                  padding: const EdgeInsets.all(4),
+                  shape: const StadiumBorder(),
+                  minimumSize: const Size(100, 40),
+                ),
+                onPressed: () {
+                  saveSession(
+                      context,
+                      widget.lana["id"],
+                      DateTime.now().toString(),
+                      elapsedMilliseconds/1000,
+                  );
+                  Navigator.pop(context);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    'Save',
+                    style: styleButtonText,
+                  ),
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ],
     );
