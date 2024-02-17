@@ -8,20 +8,24 @@ import 'package:lanak/views/lana_detail.dart';
 class TaskLoad {
   double nTasks;
   double totalHours;
+  double behindHours;
 
   TaskLoad({
     this.nTasks = 0,
     this.totalHours = 0,
+    this.behindHours = 0,
   });
 
   void reset() {
     nTasks = 0;
     totalHours = 0;
+    behindHours = 0;
   }
 
   void addTask(Map<String, dynamic> task) {
     nTasks += 1;
     totalHours += task["hours"] ?? 0;
+    behindHours += task["lag"] ?? 0;
   }
 }
 
@@ -62,15 +66,49 @@ class _MainViewState extends State<MainView> {
   }
 
   Widget _titleRow() {
-    const Color color = Colors.blueAccent;
-    const styleTitle = TextStyle(fontSize: 20, color: color);
+    const Color nTasksColor = Colors.blueAccent;
+    const Color totalHoursColor = Colors.purple;
+    Color behindHoursColor = Colors.red;
+    IconData behindHoursIconData = Icons.dangerous_outlined;
+    if (taskLoad.behindHours < 0) {
+      behindHoursColor = Colors.lightGreen;
+      behindHoursIconData = Icons.check_circle_outline;
+    }
+    const double textSize = 32;
+    const nTasksStyle = TextStyle(fontSize: textSize, color: nTasksColor);
+    const totalHoursStyle = TextStyle(fontSize: textSize, color: totalHoursColor);
+    var behindHoursStyle = TextStyle(fontSize: textSize, color: behindHoursColor);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Text(
-        "${taskLoad.nTasks} tasks, ${taskLoad.totalHours} total hours",
-        style: styleTitle,
-      )
+      padding: const EdgeInsets.only(top: 16, bottom: 0),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              Text(taskLoad.nTasks.toStringAsFixed((0)), style: nTasksStyle,),
+              const Icon(Icons.density_small, size: 32, color: nTasksColor),
+            ],
+          ),
+          const SizedBox(width: 16,),
+          Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              Text("${taskLoad.totalHours.toStringAsFixed((1))}h", style: totalHoursStyle,),
+              const Icon(Icons.bolt, size: 32, color: totalHoursColor),
+            ],
+          ),
+          const SizedBox(width: 16,),
+          Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              Text("${taskLoad.behindHours.toStringAsFixed((1))}h", style: behindHoursStyle,),
+              Icon(behindHoursIconData, size: 32, color: behindHoursColor),
+            ],
+          ),
+        ]
+      ),
     );
   }
 
