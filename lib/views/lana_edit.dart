@@ -92,11 +92,11 @@ class _LanaEditViewState extends State<LanaEditView> {
                 elevation: 3,
               ),
                 onPressed: () {
-                  int lanaId = -1;
+                  int lanaId = -1;  // -1 = creation, else update
                   if (widget.lana.containsKey("id")) {
                     lanaId = widget.lana["id"];
                   }
-                  saveTask(
+                  saveLana(
                     context,
                     lanaId,
                     lanakNameController.text,
@@ -110,16 +110,16 @@ class _LanaEditViewState extends State<LanaEditView> {
                 child: const Text("Submit"),
             )
           ),
-          // Padding(
-          //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          //     child: ElevatedButton(
-          //       onPressed: () {
-          //         deleteLanaDatabase();
-          //         print("db dropped!");
-          //       },
-          //       child: const Text("DROP DB"),
-          //     )
-          // )
+          Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: ElevatedButton(
+                onPressed: () {
+                  deleteLanaDatabase();
+                  print("db dropped!");
+                },
+                child: const Text("DROP DB"),
+              )
+          )
         ],
       )
     );

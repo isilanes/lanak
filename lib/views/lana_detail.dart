@@ -154,6 +154,13 @@ class _LanaDetailViewState extends State<LanaDetailView> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                child: Text(
+                  widget.lana.toString(),
+                  style: styleInfoListText,
+                )
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
                 child: FutureBuilder<double>(
                   future: totalLanaRunHours(widget.lana["id"]),
                   builder: (
@@ -170,11 +177,11 @@ class _LanaDetailViewState extends State<LanaDetailView> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-                child: FutureBuilder<int>(
+                child: FutureBuilder<double>(
                     future: totalLanaAgeHours(widget.lana["id"]),
                     builder: (
                         BuildContext context,
-                        AsyncSnapshot<int> snapshot,
+                        AsyncSnapshot<double> snapshot,
                         ) {
                       // return Text("Age: ${snapshot.data.toString()} hours");
                       return Text(
@@ -213,27 +220,6 @@ class _LanaDetailViewState extends State<LanaDetailView> {
                       );
                     }
                 ),
-              ),
-              const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-                  child: Text("Events:", style: styleInfoListText),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: FutureBuilder<List<Widget>>(
-                  future: _events(),
-                  builder: (
-                      BuildContext context,
-                      AsyncSnapshot<List<Widget>> snapshot,
-                  ) {
-                    List<Widget> children;
-                    children = snapshot.data ?? [];
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: children,
-                    );
-                  }
-                )
               ),
             ]
         )

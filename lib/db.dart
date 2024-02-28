@@ -12,10 +12,7 @@ Future<Database> startDatabase() async {
     join(await getDatabasesPath(), "task_database.db"),
     onCreate: (db, version) {
       db.execute(
-        "CREATE TABLE tasks(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT, hours FLOAT)",
-      );
-      db.execute(
-        "CREATE TABLE sessions(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, task_id INTEGER, seconds FLOAT, timestamp TEXT)",
+        "CREATE TABLE lanak(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT, projected FLOAT, hours FLOAT, start TEXT)",
       );
     },
     version: 1,
@@ -24,52 +21,58 @@ Future<Database> startDatabase() async {
   return database;
 }
 
-class Task {
-  final int id;
-  final String name;
-  final double hours;
+class Lana {
+  final int id;            // Unique ID of the task
+  final String name;       // Name of the task
+  final double projected;  // Projected weekly hours to work on the task
+  final double hours;      // Hours worked on the task
+  final String start;      // Timestamp when Lana was created
 
-  const Task({
+  const Lana({
     required this.id,
     required this.name,
+    required this.projected,
     required this.hours,
+    required this.start,
   });
 }
 
-class Session {
-  final int id;
-  final int taskId;  // FK to Task
-  final double seconds;
-  final String timestamp;
+Future<Map<String, dynamic>> getLana (lanaId) async {
+  final db = await startDatabase();
 
-  const Session({
-    required this.id,
-    required this.taskId,
-    required this.seconds,
-    required this.timestamp,
-  });
+  final List<Map<String, dynamic>> lanak = await db.query(
+    "lanak",
+    where: "id=?",
+    whereArgs: [lanaId],
+    limit: 1,
+  );
+
+  return lanak[0];
 }
 
-void saveTask (context, lanaId, lanaName, lanaHours) async {
-  Map<String, Object> lanaDict = {
-    "name": lanaName,
-    "hours": lanaHours,
-  };
-  if (lanaId != -1) {
-    lanaDict["id"] = lanaId;
+void saveLana (context, lanaId, lanaName, lanaProjected) async {
+  Map<String, dynamic> lanaDict = {};
+  if (lanaId != -1) {  // update
+    lanaDict = await getLana(lanaId);
+  } else {  // insert
+    lanaDict["start"] = DateTime.now().toString();
+    lanaDict["hours"] = 0;
   }
+  lanaDict["name"] = lanaName;
+  lanaDict["projected"] = lanaProjected;
+
   final db = await startDatabase();
 
   await db.insert(
-    "tasks",
-    lanaDict,
-    conflictAlgorithm: ConflictAlgorithm.replace,
+      "lanak",
+      lanaDict,
+      conflictAlgorithm: ConflictAlgorithm.replace,
   );
 
   ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(
-            "Lana '$lanaName' saved")
-        )
+      SnackBar(content: Text(
+          "Lana '$lanaName' saved")
+      )
   );
 }
 
@@ -95,7 +98,7 @@ void deleteLanaDatabase () async {
 
 Future<List<Map<String, dynamic>>> getTasks() async {
   final db = await startDatabase();
-  final List<Map<String, dynamic>> maps = await db.query("tasks");
+  final List<Map<String, dynamic>> maps = await db.query("lanak");
 
   return maps;
 }
