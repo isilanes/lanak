@@ -77,16 +77,14 @@ void saveLana (context, lanaId, lanaName, lanaProjected) async {
 }
 
 void saveSession (context, lanaId, timestamp, seconds) async {
-  Map<String, Object> sessionDict = {
-    "task_id": lanaId,
-    "seconds": seconds,
-    "timestamp": timestamp,
-  };
   final db = await startDatabase();
+  Map<String, dynamic> lana = await getLana(lanaId);
+  final lanaDict = Map.of(lana);  // otherwise 'lana' is immutable, from db
+  lanaDict["hours"] = lana["hours"] + seconds/3600;
 
   await db.insert(
-    "sessions",
-    sessionDict,
+    "lanak",
+    lanaDict,
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
 }
@@ -101,17 +99,4 @@ Future<List<Map<String, dynamic>>> getTasks() async {
   final List<Map<String, dynamic>> maps = await db.query("lanak");
 
   return maps;
-}
-
-Future<List<Map<String, dynamic>>> getSessionsOf(int lanaId, [int limit = 10]) async {
-  final db = await startDatabase();
-  final List<Map<String, dynamic>> sessions = await db.query(
-      "sessions",
-      where: "task_id=?",
-      whereArgs: [lanaId],
-      limit: limit,
-      orderBy: "timestamp DESC",
-  );
-
-  return sessions;
 }

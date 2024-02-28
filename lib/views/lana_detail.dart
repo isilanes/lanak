@@ -53,28 +53,6 @@ class _LanaDetailViewState extends State<LanaDetailView> {
     );
   }
 
-  Future<List<Widget>> _events() async {
-    final sessions = await getSessionsOf(widget.lana["id"]);
-
-    return sessions.map(
-            (e) {
-              String ts = e["timestamp"].substring(0, 19);
-              String dt = (e["seconds"]/60).toStringAsFixed(1);
-              return Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Text(ts, style: styleSessionDate),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Text("$dt m", style: styleSessionElapsed),
-                    ),
-                  ],
-              );
-            }).toList();
-  }
-
   Widget _lanaDetail() {
     const styleButtonText = TextStyle(fontSize: 20, color: Colors.white);
     const styleInfoListText = TextStyle(fontSize: 16, color: Colors.black);
@@ -96,7 +74,7 @@ class _LanaDetailViewState extends State<LanaDetailView> {
               Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                   child: Text(
-                    "for ${widget.lana['hours']} h/week",
+                    "for ${widget.lana['projected']} h/week",
                     style: styleLanaTime,
                   )
               ),
@@ -169,7 +147,7 @@ class _LanaDetailViewState extends State<LanaDetailView> {
                   ) {
                     double totalHours = snapshot.data ?? 0;
                     return Text(
-                        "Total time: ${totalHours.toStringAsFixed(1)} hours",
+                        "Total time: ${totalHours.toStringAsFixed(3)} hours",
                         style: styleInfoListText,
                     );
                   }
@@ -194,28 +172,13 @@ class _LanaDetailViewState extends State<LanaDetailView> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
                 child: FutureBuilder<double>(
-                    future: realWeeklyHours(widget.lana["id"]),
-                    builder: (
-                        BuildContext context,
-                        AsyncSnapshot<double> snapshot,
-                        ) {
-                      return Text(
-                        "Weekly time: ${hoursToHuman(snapshot.data!)}",
-                        style: styleInfoListText,
-                      );
-                    }
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-                child: FutureBuilder<double>(
                     future: lagBehind(widget.lana["id"]),
                     builder: (
                         BuildContext context,
                         AsyncSnapshot<double> snapshot,
                         ) {
                       return Text(
-                        "Time behind/ahead: ${hoursToHuman(snapshot.data!)}",
+                        "Lag: ${hoursToHuman(snapshot.data!)}",
                         style: styleInfoListText,
                       );
                     }
