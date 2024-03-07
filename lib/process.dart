@@ -44,9 +44,9 @@ Future<List<Map<String, dynamic>>> getLanakWithLag() async {
   final List<Map<String, dynamic>> lanaDictsWithLag = [];
 
   for (final lanaDict in lanaDicts) {
-    Map<String, dynamic> newLanaDict = Map<String, dynamic>.from(lanaDict);
-    newLanaDict["lag"] = await lagBehind(lanaDict["id"]);
-    lanaDictsWithLag.add(newLanaDict);
+      Map<String, dynamic> newLanaDict = Map<String, dynamic>.from(lanaDict);
+      newLanaDict["lag"] = await lagBehind(lanaDict["id"]);
+      lanaDictsWithLag.add(newLanaDict);
   }
 
   lanaDictsWithLag.sort((a, b) => b["lag"].compareTo(a["lag"]));

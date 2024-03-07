@@ -94,13 +94,13 @@ class _LanaEditViewState extends State<LanaEditView> {
                 onPressed: () {
                   int lanaId = -1;  // -1 = creation, else update
                   if (widget.lana.containsKey("id")) {
-                    lanaId = widget.lana["id"];
+                      lanaId = widget.lana["id"];
                   }
                   saveLana(
-                    context,
-                    lanaId,
-                    lanakNameController.text,
-                    lanakHoursController.text,
+                      context,
+                      lanaId,
+                      lanakNameController.text,
+                      lanakHoursController.text,
                   );
                   Navigator.push(
                       context,
