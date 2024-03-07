@@ -42,50 +42,64 @@ class _MainViewState extends State<MainView> {
     setState(() {});
   }
 
-  Widget _titleRow() {
+  Widget titleRow() {
     const Color nTasksColor = Colors.blueAccent;
     const Color totalHoursColor = Colors.purple;
     Color behindHoursColor = Colors.red;
     IconData behindHoursIconData = Icons.dangerous_outlined;
-    if (taskLoad.behindHours < 0) {
-      behindHoursColor = Colors.lightGreen;
-      behindHoursIconData = Icons.check_circle_outline;
-    }
     const double textSize = 32;
     const nTasksStyle = TextStyle(fontSize: textSize, color: nTasksColor);
     const totalHoursStyle = TextStyle(fontSize: textSize, color: totalHoursColor);
     var behindHoursStyle = TextStyle(fontSize: textSize, color: behindHoursColor);
 
-    return Padding(
-      padding: const EdgeInsets.only(top: 16, bottom: 0),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Wrap(
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              Text(taskLoad.nTasks.toStringAsFixed((0)), style: nTasksStyle,),
-              const Icon(Icons.density_small, size: 32, color: nTasksColor),
-            ],
-          ),
-          const SizedBox(width: 16,),
-          Wrap(
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              Text("${taskLoad.totalHours.toStringAsFixed((1))}h", style: totalHoursStyle,),
-              const Icon(Icons.bolt, size: 32, color: totalHoursColor),
-            ],
-          ),
-          const SizedBox(width: 16,),
-          Wrap(
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              Text("${taskLoad.behindHours.toStringAsFixed((1))}h", style: behindHoursStyle,),
-              Icon(behindHoursIconData, size: 32, color: behindHoursColor),
-            ],
-          ),
-        ]
-      ),
+    taskLoad.reset();
+    if (taskLoad.behindHours < 0) {
+        behindHoursColor = Colors.lightGreen;
+        behindHoursIconData = Icons.check_circle_outline;
+    }
+
+    return FutureBuilder(
+        future: _tasks,
+        builder: (
+            BuildContext context,
+            AsyncSnapshot<List<Map<String, dynamic>>> snapshot,
+        ) {
+            taskLoad.reset();
+            for (final lanaDict in snapshot.data!) {
+                taskLoad.addTask(lanaDict);
+            }
+            return Padding(
+              padding: const EdgeInsets.only(top: 16, bottom: 0),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text(taskLoad.nTasks.toStringAsFixed((0)), style: nTasksStyle,),
+                      const Icon(Icons.density_small, size: 32, color: nTasksColor),
+                    ],
+                  ),
+                  const SizedBox(width: 16,),
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text("${taskLoad.totalHours.toStringAsFixed((1))}h", style: totalHoursStyle,),
+                      const Icon(Icons.bolt, size: 32, color: totalHoursColor),
+                    ],
+                  ),
+                  const SizedBox(width: 16,),
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text("${taskLoad.behindHours.toStringAsFixed((1))}h", style: behindHoursStyle,),
+                      Icon(behindHoursIconData, size: 32, color: behindHoursColor),
+                    ],
+                  ),
+                ]
+            ),
+          );
+        }
     );
   }
 
@@ -98,7 +112,7 @@ class _MainViewState extends State<MainView> {
       ),
       body: Column(
         children: <Widget>[
-          _titleRow(),
+          titleRow(),
           FutureBuilder<List<Map<String, dynamic>>>(
               future: _tasks,
               builder: (
