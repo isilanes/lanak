@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:lanak/db.dart';
 import 'package:lanak/process.dart';
 import 'package:lanak/views/lana_edit.dart';
 import 'package:lanak/views/lana_run.dart';

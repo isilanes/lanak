@@ -1,33 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:lanak/components/lists.dart';
 
 import 'package:lanak/process.dart';
 import 'package:lanak/views/lana_edit.dart';
 import 'package:lanak/views/lana_detail.dart';
-
-
-class TaskLoad {
-  double nTasks;
-  double totalHours;
-  double behindHours;
-
-  TaskLoad({
-    this.nTasks = 0,
-    this.totalHours = 0,
-    this.behindHours = 0,
-  });
-
-  void reset() {
-    nTasks = 0;
-    totalHours = 0;
-    behindHours = 0;
-  }
-
-  void addTask(Map<String, dynamic> task) {
-    nTasks += 1;
-    totalHours += task["hours"] ?? 0;
-    behindHours += task["lag"] ?? 0;
-  }
-}
+import 'package:lanak/entities.dart';
 
 
 class MainView extends StatefulWidget {
@@ -112,51 +89,6 @@ class _MainViewState extends State<MainView> {
     );
   }
 
-  Widget _buildRow(Map<String, dynamic> task) {
-    final screen = MediaQuery.of(context).size;
-    final lag = task["lag"];
-    Color color = Colors.deepOrange;
-    if (lag < 0) {
-      color = Colors.lightGreen;
-    }
-    taskLoad.addTask(task);
-
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: color,
-        elevation: 3,
-      ),
-      onPressed: () {
-        _goToLanaDetail(task);
-      },
-      child: Row(
-        children: [
-          SizedBox(
-            width: screen.width * 0.55,
-            child: Text(
-              task['name'],
-              style: styleTaskListText,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          Text(
-            "|",
-            style: styleTaskListText,
-          ),
-          SizedBox(
-              width: screen.width * 0.20,
-              child: Text(
-                lag.toStringAsFixed(1),
-                style: styleTaskListText,
-                textAlign: TextAlign.right,
-                overflow: TextOverflow.ellipsis,
-              )
-          )
-        ]
-      )
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -180,7 +112,17 @@ class _MainViewState extends State<MainView> {
                 if (snapshot.hasData) {
                   children = <Widget>[
                     for (final task in snapshot.data!)
-                      _buildRow(task)
+                      Row(
+                          children: <Widget>[
+                            lanaRow(task, context, taskLoad, styleTaskListText),
+                            IconButton(
+                              onPressed: () {
+                                _goToLanaDetail(task);
+                              },
+                              icon: const Icon(Icons.settings, size: 35),
+                            )
+                          ]
+                      )
                   ];
                 } else if (snapshot.hasError) {
                   children = <Widget>[
