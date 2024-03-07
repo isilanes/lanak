@@ -53,10 +53,11 @@ Future<Map<String, dynamic>> getLana (lanaId) async {
 void saveLana (context, lanaId, lanaName, lanaProjected) async {
   Map<String, dynamic> lanaDict = {};
   if (lanaId != -1) {  // update
-    lanaDict = await getLana(lanaId);
+      Map<String, dynamic> rawLanaDict = await getLana(lanaId);
+      lanaDict = Map.of(rawLanaDict);
   } else {  // insert
-    lanaDict["start"] = DateTime.now().toString();
-    lanaDict["hours"] = 0;
+      lanaDict["start"] = DateTime.now().toString();
+      lanaDict["hours"] = 0;
   }
   lanaDict["name"] = lanaName;
   lanaDict["projected"] = lanaProjected;
