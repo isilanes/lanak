@@ -52,12 +52,6 @@ class _MainViewState extends State<MainView> {
     const totalHoursStyle = TextStyle(fontSize: textSize, color: totalHoursColor);
     var behindHoursStyle = TextStyle(fontSize: textSize, color: behindHoursColor);
 
-    taskLoad.reset();
-    if (taskLoad.behindHours < 0) {
-        behindHoursColor = Colors.lightGreen;
-        behindHoursIconData = Icons.check_circle_outline;
-    }
-
     return FutureBuilder(
         future: _tasks,
         builder: (
@@ -68,6 +62,11 @@ class _MainViewState extends State<MainView> {
             for (final lanaDict in snapshot.data!) {
                 taskLoad.addTask(lanaDict);
             }
+            if (taskLoad.behindHours < 0) {
+              behindHoursColor = Colors.lightGreen;
+              behindHoursIconData = Icons.check_circle_outline;
+              behindHoursStyle = TextStyle(fontSize: textSize, color: behindHoursColor);
+            }
             return Padding(
               padding: const EdgeInsets.only(top: 16, bottom: 0),
               child: Row(
@@ -77,7 +76,7 @@ class _MainViewState extends State<MainView> {
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       Text(taskLoad.nTasks.toStringAsFixed((0)), style: nTasksStyle,),
-                      const Icon(Icons.density_small, size: 32, color: nTasksColor),
+                      const Icon(Icons.density_small, size: textSize, color: nTasksColor),
                     ],
                   ),
                   const SizedBox(width: 16,),
@@ -85,15 +84,15 @@ class _MainViewState extends State<MainView> {
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       Text("${taskLoad.totalHours.toStringAsFixed((1))}h", style: totalHoursStyle,),
-                      const Icon(Icons.bolt, size: 32, color: totalHoursColor),
+                      const Icon(Icons.bolt, size: textSize, color: totalHoursColor),
                     ],
                   ),
                   const SizedBox(width: 16,),
                   Wrap(
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
-                      Text("${taskLoad.behindHours.toStringAsFixed((1))}h", style: behindHoursStyle,),
-                      Icon(behindHoursIconData, size: 32, color: behindHoursColor),
+                      Text("${taskLoad.behindHours.toStringAsFixed((1))}h",  style: behindHoursStyle,),
+                      Icon(behindHoursIconData, size: textSize, color: behindHoursColor),
                     ],
                   ),
                 ]
