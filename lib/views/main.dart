@@ -121,8 +121,6 @@ class _MainViewState extends State<MainView> {
               ) {
                 List<Widget> children;
                 taskLoad.reset();
-                // taskLoad.nTasks = 0;
-                // taskLoad.totalHours = 0;
                 if (snapshot.hasData) {
                   children = <Widget>[
                     for (final task in snapshot.data!)

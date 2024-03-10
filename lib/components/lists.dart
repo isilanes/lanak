@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:lanak/entities.dart';
+import 'package:lanak/views/lana_run.dart';
 
 
 Widget lanaRow(
@@ -24,7 +25,10 @@ Widget lanaRow(
         elevation: 3,
       ),
       onPressed: () {
-        // _goToLanaDetail(task);
+        Navigator.push(
+            ctx,
+            MaterialPageRoute(builder: (context) => LanaRunView(task))
+        );
       },
       child: Row(
           children: [
