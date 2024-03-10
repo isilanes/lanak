@@ -41,8 +41,8 @@ class _LanaEditViewState extends State<LanaEditView> {
   }
 
   String _defaultLanaHours () {
-    if (widget.lana.containsKey("hours")) {
-      return widget.lana["hours"].toString();
+    if (widget.lana.containsKey("projected")) {
+      return widget.lana["projected"].toString();
     } else {
       return "";
     }
