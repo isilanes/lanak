@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lanak/process.dart';
 import 'package:lanak/views/lana_edit.dart';
 import 'package:lanak/views/lana_run.dart';
+import 'package:lanak/db.dart';
 
 
 String hoursToHuman(num hours) {
@@ -81,7 +82,7 @@ class _LanaDetailViewState extends State<LanaDetailView> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue,
@@ -122,6 +123,27 @@ class _LanaDetailViewState extends State<LanaDetailView> {
                           padding: EdgeInsets.symmetric(horizontal: 20),
                           child: Text(
                             "Start",
+                            style: styleButtonText,
+                          ),
+                        ),
+                      )
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          padding: const EdgeInsets.all(4),
+                          shape: const StadiumBorder(),
+                        ),
+                        onPressed: () async {
+                          deleteLana(widget.lana);
+                          Navigator.pop(context);
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          child: Text(
+                            "Delete",
                             style: styleButtonText,
                           ),
                         ),

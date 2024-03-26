@@ -95,6 +95,13 @@ void deleteLanaDatabase () async {
   deleteDatabase(dbPath);
 }
 
+void deleteLana (lanaDict) async {
+  final db = await startDatabase();
+  int lanaId = lanaDict["id"];
+
+  await db.delete("lanak", where: "id = ?", whereArgs: [lanaId]);
+}
+
 Future<List<Map<String, dynamic>>> getTasks() async {
   final db = await startDatabase();
   final List<Map<String, dynamic>> maps = await db.query("lanak");
