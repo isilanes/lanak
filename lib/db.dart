@@ -60,7 +60,7 @@ void saveLana (context, lanaId, lanaName, lanaProjected) async {
       lanaDict["hours"] = 0;
   }
   lanaDict["name"] = lanaName;
-  lanaDict["projected"] = lanaProjected;
+  lanaDict["projected"] = double.parse(lanaProjected)/60;
 
   final db = await startDatabase();
 

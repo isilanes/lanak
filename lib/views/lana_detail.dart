@@ -73,7 +73,7 @@ class _LanaDetailViewState extends State<LanaDetailView> {
               Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                   child: Text(
-                    "for ${widget.lana['projected']} h/week",
+                    "for ${(widget.lana['projected']*60).toStringAsFixed(0)} min/week",
                     style: styleLanaTime,
                   )
               ),

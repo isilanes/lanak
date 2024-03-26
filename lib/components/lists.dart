@@ -12,9 +12,9 @@ Widget lanaRow(
     ) {
   final screen = MediaQuery.of(ctx).size;
 
-  final lag = task["lag"];
+  final lagMinutes = task["lag"]*60;
   Color color = Colors.deepOrange;
-  if (lag < 0) {
+  if (lagMinutes < 0) {
     color = Colors.lightGreen;
   }
   taskLoad.addTask(task);
@@ -47,7 +47,7 @@ Widget lanaRow(
             SizedBox(
                 width: screen.width * 0.15,
                 child: Text(
-                  lag.toStringAsFixed(1),
+                  lagMinutes.toStringAsFixed(0),
                   style: style,
                   textAlign: TextAlign.right,
                   overflow: TextOverflow.ellipsis,

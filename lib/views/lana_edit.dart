@@ -16,7 +16,7 @@ class LanaEditView extends StatefulWidget {
 class _LanaEditViewState extends State<LanaEditView> {
   final styleTaskDetailText = const TextStyle(fontSize: 24);
   final lanakNameController = TextEditingController();
-  final lanakHoursController = TextEditingController();
+  final lanakMinutesController = TextEditingController();
 
   @override
   void dispose() {
@@ -40,9 +40,9 @@ class _LanaEditViewState extends State<LanaEditView> {
     }
   }
 
-  String _defaultLanaHours () {
+  String _defaultLanaMinutes () {
     if (widget.lana.containsKey("projected")) {
-      return widget.lana["projected"].toString();
+      return (widget.lana["projected"]*60).toStringAsFixed(0);
     } else {
       return "";
     }
@@ -79,9 +79,9 @@ class _LanaEditViewState extends State<LanaEditView> {
               child: TextField(
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: "Enter Lanak hours per week",
+                  labelText: "Enter Lanak minutes per week",
                 ),
-                controller: lanakHoursController..text = _defaultLanaHours(),
+                controller: lanakMinutesController..text = _defaultLanaMinutes(),
               )
           ),
           Padding(
@@ -100,7 +100,7 @@ class _LanaEditViewState extends State<LanaEditView> {
                       context,
                       lanaId,
                       lanakNameController.text,
-                      lanakHoursController.text,
+                      lanakMinutesController.text,
                   );
                   Navigator.push(
                       context,

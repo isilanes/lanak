@@ -91,7 +91,7 @@ class _MainViewState extends State<MainView> {
                   Wrap(
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
-                      Text("${taskLoad.behindHours.toStringAsFixed((1))}h",  style: behindHoursStyle,),
+                      Text("${(taskLoad.behindHours*60).toStringAsFixed(0)}m",  style: behindHoursStyle,),
                       Icon(behindHoursIconData, size: textSize, color: behindHoursColor),
                     ],
                   ),
