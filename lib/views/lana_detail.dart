@@ -7,39 +7,39 @@ import 'package:lanak/db.dart';
 
 
 String hoursToHuman(num hours) {
-  if (hours > 168) {
-    return "${(hours/168.0).toStringAsFixed(1)} weeks";
-  } else if (hours > 24) {
-      return "${(hours/24.0).toStringAsFixed(1)} days";
-  }
-  return "${hours.toStringAsFixed(1)} hours";
+    if (hours > 168) {
+        return "${(hours/168.0).toStringAsFixed(1)} weeks";
+    } else if (hours > 24) {
+        return "${(hours/24.0).toStringAsFixed(1)} days";
+    }
+    return "${hours.toStringAsFixed(1)} hours";
 }
 
 class LanaDetailView extends StatefulWidget {
-  final Map<String, dynamic> lana;
+    final Map<String, dynamic> lana;
 
-  const LanaDetailView(this.lana, {super.key});
+    const LanaDetailView(this.lana, {super.key});
 
-  final String title = "Lana detail";
+    final String title = "Lana detail";
 
-  @override
-  State<LanaDetailView> createState() => _LanaDetailViewState();
+    @override
+    State<LanaDetailView> createState() => _LanaDetailViewState();
 }
 
 
 class _LanaDetailViewState extends State<LanaDetailView> {
   final styleLanaName = const TextStyle(fontSize: 32);
   final styleLanaTime = const TextStyle(
-    fontSize: 20,
-    color: Colors.brown,
+      fontSize: 20,
+      color: Colors.brown,
   );
   final styleSessionDate = const TextStyle(
-    fontSize: 16,
-    color: Colors.black,
+      fontSize: 16,
+      color: Colors.black,
   );
   final styleSessionElapsed = const TextStyle(
-    fontSize: 16,
-    color: Colors.deepOrange,
+      fontSize: 16,
+      color: Colors.deepOrange,
   );
 
   @override
@@ -99,30 +99,6 @@ class _LanaDetailViewState extends State<LanaDetailView> {
                           padding: EdgeInsets.symmetric(horizontal: 20),
                           child: Text(
                             "Edit",
-                            style: styleButtonText,
-                          ),
-                        ),
-                      )
-                  ),
-                  Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
-                          padding: const EdgeInsets.all(4),
-                          shape: const StadiumBorder(),
-                        ),
-                        onPressed: () async {
-                          await Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => LanaRunView(widget.lana))
-                          );
-                          setState(() {});
-                        },
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          child: Text(
-                            "Start",
                             style: styleButtonText,
                           ),
                         ),

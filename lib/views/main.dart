@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lanak/components/lists.dart';
 
+import 'package:lanak/components/lists.dart';
 import 'package:lanak/process.dart';
 import 'package:lanak/views/lana_edit.dart';
 import 'package:lanak/views/lana_detail.dart';
@@ -125,7 +125,7 @@ class _MainViewState extends State<MainView> {
                     for (final task in snapshot.data!)
                       Row(
                           children: <Widget>[
-                            lanaRow(task, context, taskLoad, styleTaskListText),
+                            lanaRow(task, context, taskLoad, styleTaskListText, widget),
                             IconButton(
                               onPressed: () {
                                 _goToLanaDetail(task);

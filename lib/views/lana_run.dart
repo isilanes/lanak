@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 import '../db.dart';
+import 'package:lanak/main.dart';
 
 
 class LanaRunView extends StatefulWidget {
-  final Map<String, dynamic> lana;
+    final Map<String, dynamic> lana;
+    final StatefulWidget homePage;
 
-  const LanaRunView(this.lana, {super.key});
+    const LanaRunView(this.lana, this.homePage, {super.key});
 
-  @override
-  State<LanaRunView> createState() => _LanaRunViewState();
+    @override
+    State<LanaRunView> createState() => _LanaRunViewState();
 }
 
 class _LanaRunViewState extends State<LanaRunView> {
@@ -149,6 +151,10 @@ class _LanaRunViewState extends State<LanaRunView> {
                       elapsedMilliseconds/1000,
                   );
                   Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => widget.homePage)
+                  );
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),

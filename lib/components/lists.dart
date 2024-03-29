@@ -9,6 +9,7 @@ Widget lanaRow(
     BuildContext ctx,
     TaskLoad taskLoad,
     TextStyle style,
+    StatefulWidget homePage,
     ) {
   final screen = MediaQuery.of(ctx).size;
 
@@ -27,7 +28,7 @@ Widget lanaRow(
       onPressed: () {
         Navigator.push(
             ctx,
-            MaterialPageRoute(builder: (context) => LanaRunView(task))
+            MaterialPageRoute(builder: (context) => LanaRunView(task, homePage))
         );
       },
       child: Row(
