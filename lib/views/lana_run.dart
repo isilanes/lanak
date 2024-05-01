@@ -17,11 +17,12 @@ class LanaRunView extends StatefulWidget {
 
 class _LanaRunViewState extends State<LanaRunView> {
   final styleTimeDisplayText = const TextStyle(
-      fontSize: 48,
+      fontSize: 68,
       fontFamily: 'Helvetica',
       fontWeight: FontWeight.bold,
   );
   final styleButtonText = const TextStyle(fontSize: 20, color: Colors.white);
+  final styleSmallButtonText = const TextStyle(fontSize: 16, color: Colors.black);
   final StopWatchTimer _stopWatchTimer = StopWatchTimer();
   int elapsedMilliseconds = 0;
   String _currentPauseButtonText = "Start";
@@ -30,19 +31,19 @@ class _LanaRunViewState extends State<LanaRunView> {
 
   @override
   void dispose() async {
-    super.dispose();
-    await _stopWatchTimer.dispose();
+      super.dispose();
+      await _stopWatchTimer.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text("Active: ${widget.lana['name']}"),
-      ),
-      body: _lanaStopWatch(),
-    );
+      return Scaffold(
+          appBar: AppBar(
+              backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+              title: Text("Active: ${widget.lana['name']}"),
+          ),
+          body: _lanaStopWatch(),
+      );
   }
 
   Widget _streamTime() {
@@ -51,7 +52,7 @@ class _LanaRunViewState extends State<LanaRunView> {
       initialData: 0,
       builder: (context, snap) {
         final value = snap.data!.toInt();
-        final displayTime = StopWatchTimer.getDisplayTime(value);
+        final displayTime = StopWatchTimer.getDisplayTime(value, milliSecond: false);
         return Column(
           children: <Widget>[
             Padding(
@@ -71,8 +72,55 @@ class _LanaRunViewState extends State<LanaRunView> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 64, 16, 24),
-          child: _streamTime(),
+            padding: const EdgeInsets.fromLTRB(8, 64, 4, 24),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
+                  child: _streamTime(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(0),
+                  child: Column(
+                    children: <Widget>[
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.amberAccent,
+                          shape: const StadiumBorder(),
+                          minimumSize: const Size(90, 30),
+                        ),
+                        onPressed: () {
+                            // Work only upon running timers.
+                            if (_isTimerRunning) {
+                                _stopWatchTimer.setPresetMinuteTime(5, add: true);
+                            }
+                        },
+                        child: Text("+5m", style: styleSmallButtonText),
+                      ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.amberAccent,
+                            shape: const StadiumBorder(),
+                            minimumSize: const Size(90, 30),
+                        ),
+                        onPressed: () {
+                            // Work only upon running timers.
+                            if (_isTimerRunning) {
+                                _stopWatchTimer.setPresetMinuteTime(30, add: true);
+                            }
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 0),
+                          child: Text("+30m", style: styleSmallButtonText),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -106,8 +154,8 @@ class _LanaRunViewState extends State<LanaRunView> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
-                    _currentPauseButtonText,
-                    style: styleButtonText,
+                      _currentPauseButtonText,
+                      style: styleButtonText,
                   ),
                 ),
               ),
@@ -121,9 +169,16 @@ class _LanaRunViewState extends State<LanaRunView> {
                   shape: const StadiumBorder(),
                   minimumSize: const Size(100, 40),
                 ),
-                onPressed: () {
-                  _stopWatchTimer.onStopTimer();
-                  _stopWatchTimer.onResetTimer();
+                onPressed: () async {
+                    setState(() {
+                        _stopWatchTimer.onStopTimer();
+                        _stopWatchTimer.onResetTimer();
+                        _isTimerRunning = false;
+                        _currentPauseButtonText = "Start";
+                        _currentPauseButtonColor = Colors.green;
+                        _stopWatchTimer.setPresetTime(mSec: 0, add: false);
+                        elapsedMilliseconds = 0;
+                    });
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
