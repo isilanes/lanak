@@ -82,12 +82,13 @@ class _LanaDetailViewState extends State<LanaDetailView> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                      padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue,
                           padding: const EdgeInsets.all(4),
                           shape: const StadiumBorder(),
+                          minimumSize: const Size(100, 40),
                         ),
                         onPressed: () {
                           Navigator.push(
@@ -95,13 +96,7 @@ class _LanaDetailViewState extends State<LanaDetailView> {
                               MaterialPageRoute(builder: (context) => LanaEditView(widget.lana))
                           );
                         },
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          child: Text(
-                            "Edit",
-                            style: styleButtonText,
-                          ),
-                        ),
+                        child: const Text("Edit", style: styleButtonText),
                       )
                   ),
                   Padding(
@@ -111,75 +106,16 @@ class _LanaDetailViewState extends State<LanaDetailView> {
                           backgroundColor: Colors.red,
                           padding: const EdgeInsets.all(4),
                           shape: const StadiumBorder(),
+                          minimumSize: const Size(100, 40),
                         ),
                         onPressed: () async {
                           deleteLana(widget.lana);
                           Navigator.pop(context);
                         },
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          child: Text(
-                            "Delete",
-                            style: styleButtonText,
-                          ),
-                        ),
+                        child: const Text("Delete", style: styleButtonText),
                       )
                   ),
                 ],
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-                child: Text(
-                  widget.lana.toString(),
-                  style: styleInfoListText,
-                )
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-                child: FutureBuilder<double>(
-                  future: totalLanaRunHours(widget.lana["id"]),
-                  builder: (
-                      BuildContext context,
-                      AsyncSnapshot<double> snapshot,
-                  ) {
-                    double totalHours = snapshot.data ?? 0;
-                    return Text(
-                        "Total time: ${totalHours.toStringAsFixed(3)} hours",
-                        style: styleInfoListText,
-                    );
-                  }
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-                child: FutureBuilder<double>(
-                    future: totalLanaAgeHours(widget.lana["id"]),
-                    builder: (
-                        BuildContext context,
-                        AsyncSnapshot<double> snapshot,
-                        ) {
-                      // return Text("Age: ${snapshot.data.toString()} hours");
-                      return Text(
-                          "Age: ${hoursToHuman(snapshot.data!)}",
-                          style: styleInfoListText,
-                      );
-                    }
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-                child: FutureBuilder<double>(
-                    future: lagBehind(widget.lana["id"]),
-                    builder: (
-                        BuildContext context,
-                        AsyncSnapshot<double> snapshot,
-                        ) {
-                      return Text(
-                        "Lag: ${hoursToHuman(snapshot.data!)}",
-                        style: styleInfoListText,
-                      );
-                    }
-                ),
               ),
             ]
         )
